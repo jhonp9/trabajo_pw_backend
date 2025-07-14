@@ -61,13 +61,25 @@ export const createGame = async (req: Request, res: Response) => {
 export const updateGame = async (req: Request, res: Response) => {
   const prisma = new PrismaClient();
   try {
-    const gameData = gameSchema.partial().parse(req.body);
+    // Convertir price a número y limpiar trailerUrl
+    const rawData = req.body;
+    const processedData = {
+      ...rawData,
+      price: typeof rawData.price === 'string' ? parseFloat(rawData.price) : rawData.price,
+      trailerUrl: rawData.trailerUrl?.replace(/^.*(youtu\.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/i, '$2')
+    };
+
+    // Validar con el schema
+    const gameData = gameSchema.partial().parse(processedData);
+
     const game = await prisma.game.update({
       where: { id: parseInt(req.params.id) },
       data: gameData
     });
+    
     res.json(game);
   } catch (error) {
+    console.error('Error detallado:', error);
     res.status(400).json({ 
       message: error instanceof Error ? error.message : 'Error al actualizar el juego' 
     });

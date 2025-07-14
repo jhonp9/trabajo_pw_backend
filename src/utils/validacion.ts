@@ -23,7 +23,7 @@ export const gameSchema = z.object({
     minimum: z.array(z.string()).min(1, 'Requisitos mínimos son requeridos'),
     recommended: z.array(z.string()).min(1, 'Requisitos recomendados son requeridos')
   }),
-  trailerUrl: z.string().url('URL de tráiler inválida'),
+  trailerUrl: z.string().length(11, 'El código del trailer debe tener exactamente 11 caracteres'),
   oferta: z.string().optional()
 });
 
