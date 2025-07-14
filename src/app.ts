@@ -6,6 +6,7 @@ import authRouter from './routes/auth.routes';
 import gamesRouter from './routes/games.routes';
 import newsRouter from './routes/news.routes';
 import usersRouter from './routes/users.routes';
+import reviewsRouter from './routes/reviews.routes';
 import { errorHandler } from './middlewares/error.middleware';
 
 config();
@@ -27,6 +28,7 @@ app.use('/api/auth', authRouter);
 app.use('/api/games', gamesRouter);
 app.use('/api/news', newsRouter);
 app.use('/api/users', usersRouter);
+app.use('/api/reviews', reviewsRouter);
 
 // Error handling
 app.use(errorHandler);

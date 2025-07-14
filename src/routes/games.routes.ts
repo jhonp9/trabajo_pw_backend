@@ -22,4 +22,5 @@ router.delete('/:id', authenticate, authorizeAdmin, deleteGame);
 router.post('/:gameId/reviews', authenticate, addGameReview);
 router.post('/:gameId/purchase', authenticate, purchaseGame);
 router.post('/process-purchase', authenticate, processPurchase);
+
 export default router;

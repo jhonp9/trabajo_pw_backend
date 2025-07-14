@@ -14,6 +14,7 @@ export interface Review {
   rating: number;
   comment: string;
   date: string;
+  userId?: number;
 }
 export interface News {
   id: string;

@@ -1,8 +1,8 @@
 import { RequestHandler } from 'express';
 import { PrismaClient } from '../generated/prisma';
 import { generateToken, hashPassword, comparePasswords } from '../utils/auth';
-import { sendVerificationEmail, sendPurchaseReceipt } from '../services/email.service';
-import { generateVerificationCode, generateGameKey } from '../utils/generators';
+import { sendVerificationEmail } from '../services/email.service';
+import { generateVerificationCode } from '../utils/generators';
 import { registerSchema, loginSchema } from '../utils/validacion';
 
 // Almacenamiento temporal de registros pendientes

@@ -82,3 +82,26 @@ export const deleteUser = async (req: Request, res: Response) => {
     res.status(500).json({ message: 'Error al eliminar el usuario' });
   }
 };
+
+export const checkGamePurchase = async (req: Request, res: Response) => {
+  const prisma = new PrismaClient();
+  try {
+    const { userId, gameId } = req.params;
+    
+    const purchase = await prisma.purchase.findFirst({
+      where: {
+        userId: parseInt(userId),
+        items: {
+          some: {
+            gameId: parseInt(gameId)
+          }
+        }
+      }
+    });
+
+    res.json({ success: !!purchase });
+  } catch (error) {
+    console.error('Error checking game purchase:', error);
+    res.status(500).json({ success: false, message: 'Error al verificar la compra' });
+  }
+};
