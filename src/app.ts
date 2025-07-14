@@ -15,7 +15,7 @@ const app = express();
 
 // Middlewares
 app.use(cors({
-  origin: process.env.FRONTEND_URL,
+  origin: 'https://jhonp9.github.io/trabajo_pw_ultimaversion/',
   credentials: true,
   methods: ['GET', 'POST', 'PUT', 'DELETE'],
   allowedHeaders: ['Content-Type', 'Authorization']
