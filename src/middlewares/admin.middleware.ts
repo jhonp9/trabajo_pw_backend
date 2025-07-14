@@ -1,4 +1,3 @@
-import { Request, Response, NextFunction } from 'express';
 import { RequestHandler } from 'express';
 
 export const authorizeAdmin : RequestHandler = async (req, res, next) => {

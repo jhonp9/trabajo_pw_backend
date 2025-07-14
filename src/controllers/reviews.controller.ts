@@ -16,10 +16,10 @@ export const getGameReviews = async (req: Request, res: Response) => {
       success: true,
       data: reviews.map(review => ({
         id: review.id,
-        author: review.user?.name || review.author || 'Anónimo', // Más manejo de casos
+        author: review.user?.name || review.author || 'Anónimo', 
         rating: review.rating,
         comment: review.comment,
-        date: review.date, // Usamos el campo date definido en el schema
+        date: review.date, 
       })),
     });
   } catch (error) {
@@ -126,7 +126,7 @@ export const createGameReview = async (req: Request, res: Response) => {
   }
 };
 
-// Función para generar UUID (añadir al archivo)
+// Función para generar UUID 
 function uuidv4() {
   return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
     const r = Math.random() * 16 | 0,

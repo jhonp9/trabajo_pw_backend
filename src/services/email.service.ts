@@ -32,16 +32,16 @@ transporter.verify((error) => {
   }
 });
 
-/**
- * Genera un código de verificación de 6 dígitos
- */
+
+// Genera un código de verificación de 6 dígitos
+
 export const generateVerificationCode = (): string => {
   return Math.floor(100000 + Math.random() * 900000).toString();
 };
 
-/**
- * Envía un email con el código de verificación
- */
+
+// Envía un email con el código de verificación
+ 
 export const sendVerificationEmail = async (email: string, code: string): Promise<void> => {
   try {
     const mailOptions = {
@@ -78,9 +78,9 @@ export const sendVerificationEmail = async (email: string, code: string): Promis
   }
 };
 
-/**
- * Genera una clave de juego aleatoria
- */
+
+// Genera una clave de juego aleatoria
+
 const generateGameKey = (): string => {
   const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789'; // Caracteres válidos, omitiendo 0, O, 1, I
   const segments = [4, 4, 4, 4]; // Formato: XXXX-XXXX-XXXX-XXXX
@@ -98,9 +98,9 @@ const generateGameKey = (): string => {
   return key;
 };
 
-/**
- * Envía un email con el recibo de compra y claves de juego
- */
+
+// Envía un email con el recibo de compra y claves de juego
+ 
 export const sendPurchaseReceipt = async (
   email: string,
   items: Array<{
@@ -202,9 +202,9 @@ export const sendPurchaseReceipt = async (
   }
 };
 
-/**
- * Envía un email para restablecer contraseña
- */
+
+// Envía un email para restablecer contraseña
+
 export const sendPasswordResetEmail = async (email: string, token: string): Promise<void> => {
   try {
     const resetLink = `${process.env.FRONTEND_URL}/reset-password?token=${token}`;

@@ -5,15 +5,15 @@ import { sendVerificationEmail } from '../services/email.service';
 import { generateVerificationCode } from '../utils/generators';
 import { registerSchema, loginSchema } from '../utils/validacion';
 
-// Almacenamiento temporal de registros pendientes
+
 const pendingRegistrations = new Map<string, any>();
 
-// REGISTRO Y VERIFICACIÓN
+
 export const checkEmail: RequestHandler = async (req, res) => {
   const prisma = new PrismaClient();
   const { email } = req.body;
   
-  // Verificar si el email existe (incluyendo usuarios no verificados)
+  // Verificar si el email existe 
   const existingUser = await prisma.user.findUnique({ 
     where: { email },
     select: { id: true, verified: true }
@@ -30,7 +30,6 @@ export const register: RequestHandler = async (req, res) => {
   try {
     const { email, name, password } = registerSchema.parse(req.body);
     
-    // Verificar si el email ya existe (incluyendo usuarios no verificados)
     const existingUser = await prisma.user.findUnique({ 
       where: { email },
       include: { verificationCodes: true }
@@ -165,7 +164,8 @@ export const resendVerification: RequestHandler = async (req, res) => {
     pendingRegistrations.set(email, {
       ...pendingRegistration,
       verificationCode: newCode,
-      expiresAt: Date.now() + 24 * 60 * 60 * 1000 // Resetear expiración
+      // Resetear expiración
+      expiresAt: Date.now() + 24 * 60 * 60 * 1000
     });
 
     // Reenviar email

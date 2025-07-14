@@ -30,12 +30,12 @@ export const getGameDetails: RequestHandler = async (req, res, next) => {
     
     if (!game) {
       res.status(404).json({ message: 'Game not found' });
-      return; // <-- Importante: return después de enviar la respuesta
+      return; 
     }
     
-    res.json(game); // <-- Esto es suficiente, no necesitas return
+    res.json(game); 
   } catch (error) {
-    next(error); // <-- Pasa el error al middleware de errores
+    next(error); 
   }
 };
 

@@ -28,7 +28,7 @@ export const authenticate : RequestHandler = async (req, res, next)=> {
     req.user = user;
     next();
   } catch (error) {
-    next(error); // Pasa el error al siguiente middleware (errorHandler)
+    next(error); 
   }
 };
 
