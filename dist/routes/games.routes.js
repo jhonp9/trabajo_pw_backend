@@ -1,0 +1,15 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const express_1 = require("express");
+const games_controller_1 = require("../controllers/games.controller");
+const auth_middleware_1 = require("../middlewares/auth.middleware");
+const admin_middleware_1 = require("../middlewares/admin.middleware");
+const router = (0, express_1.Router)();
+router.get('/', games_controller_1.getGamesList);
+router.get('/:id', games_controller_1.getGameDetails);
+router.post('/', auth_middleware_1.authenticate, admin_middleware_1.authorizeAdmin, games_controller_1.createGame);
+router.put('/:id', auth_middleware_1.authenticate, admin_middleware_1.authorizeAdmin, games_controller_1.updateGame);
+router.delete('/:id', auth_middleware_1.authenticate, admin_middleware_1.authorizeAdmin, games_controller_1.deleteGame);
+router.post('/:gameId/reviews', auth_middleware_1.authenticate, games_controller_1.addGameReview);
+router.post('/:gameId/purchase', auth_middleware_1.authenticate, games_controller_1.purchaseGame);
+exports.default = router;

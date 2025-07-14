@@ -1,0 +1,113 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id                Int                @id @default(autoincrement())
+  email             String             @unique
+  name              String
+  password          String
+  role              String             @default("USER")
+  verified          Boolean            @default(false)
+  purchasedGames    Game[]             @relation("UserPurchasedGames")
+  reviews           Review[]
+  verificationCodes VerificationCode[]
+  purchases         Purchase[]
+  createdAt         DateTime           @default(now())
+  updatedAt         DateTime           @default(now())
+}
+
+model VerificationCode {
+  id        Int      @id @default(autoincrement())
+  code      String
+  userId    Int
+  user      User     @relation(fields: [userId], references: [id])
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+}
+
+model Game {
+  id            Int            @id @default(autoincrement())
+  title         String
+  description   String
+  price         Float
+  rating        Float          @default(0)
+  sales         Int            @default(0)
+  genres        String[]
+  platforms     String[]
+  oferta        String?
+  images        String[]
+  requirements  Json
+  trailerUrl    String
+  reviews       Review[]
+  users         User[]         @relation("UserPurchasedGames")
+  purchaseItems PurchaseItem[]
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @default(now())
+}
+
+model Review {
+  id      String @id @default(uuid())
+  author  String
+  rating  Int
+  comment String
+  date    String
+  game    Game   @relation(fields: [gameId], references: [id])
+  gameId  Int
+  user    User?  @relation(fields: [userId], references: [id])
+  userId  Int?
+}
+
+model News {
+  id        String   @id @default(uuid())
+  title     String
+  content   String
+  date      String
+  image     String?
+  author    String
+  createdAt DateTime @default(now())
+}
+
+model GameKey {
+  id            Int       @id @default(autoincrement())
+  gameTitle     String
+  key           String    @unique
+  transactionId String
+  email         String
+  createdAt     DateTime  @default(now())
+  expiresAt     DateTime
+  redeemed      Boolean   @default(false)
+  redeemedAt    DateTime?
+}
+
+model Purchase {
+  id            Int            @id @default(autoincrement())
+  userId        Int
+  user          User           @relation(fields: [userId], references: [id])
+  amount        Float
+  transactionId String         @unique
+  items         PurchaseItem[]
+  createdAt     DateTime       @default(now())
+}
+
+model PurchaseItem {
+  id              Int      @id @default(autoincrement())
+  purchase        Purchase @relation(fields: [purchaseId], references: [id])
+  purchaseId      Int
+  gameId          Int
+  game            Game     @relation(fields: [gameId], references: [id])
+  quantity        Int
+  priceAtPurchase Float
+}
