@@ -14,10 +14,11 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.authorizeAdmin = exports.authenticate = void 0;
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
-const prisma_1 = __importDefault(require("../lib/prisma"));
 const config_1 = require("../utils/config");
+const prisma_1 = require("../generated/prisma");
 const authenticate = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     var _a;
+    const prisma = new prisma_1.PrismaClient();
     try {
         const token = req.cookies.token || ((_a = req.headers.authorization) === null || _a === void 0 ? void 0 : _a.split(' ')[1]);
         if (!token) {
@@ -25,7 +26,7 @@ const authenticate = (req, res, next) => __awaiter(void 0, void 0, void 0, funct
             return;
         }
         const decoded = jsonwebtoken_1.default.verify(token, config_1.JWT_SECRET);
-        const user = yield prisma_1.default.user.findUnique({
+        const user = yield prisma.user.findUnique({
             where: { id: decoded.userId },
             select: { id: true, email: true, name: true, role: true }
         });
@@ -37,7 +38,7 @@ const authenticate = (req, res, next) => __awaiter(void 0, void 0, void 0, funct
         next();
     }
     catch (error) {
-        next(error); // Pasa el error al siguiente middleware (errorHandler)
+        next(error);
     }
 });
 exports.authenticate = authenticate;

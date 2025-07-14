@@ -8,20 +8,22 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.validateUser = exports.createUser = exports.findUserByEmail = void 0;
-const prisma_1 = __importDefault(require("../lib/prisma"));
 const auth_1 = require("../utils/auth");
+const prisma_1 = require("../generated/prisma");
 const findUserByEmail = (email) => __awaiter(void 0, void 0, void 0, function* () {
-    return prisma_1.default.user.findUnique({ where: { email } });
+    const prisma = new prisma_1.PrismaClient();
+    const user = yield prisma.user.findUnique({ where: { email } });
+    if (!user)
+        return null;
+    return Object.assign(Object.assign({}, user), { role: user.role.toLowerCase() === 'admin' ? 'admin' : 'user' });
 });
 exports.findUserByEmail = findUserByEmail;
 const createUser = (userData) => __awaiter(void 0, void 0, void 0, function* () {
+    const prisma = new prisma_1.PrismaClient();
     const hashedPassword = yield (0, auth_1.hashPassword)(userData.password);
-    return prisma_1.default.user.create({
+    const createdUser = yield prisma.user.create({
         data: {
             email: userData.email,
             name: userData.name,
@@ -29,6 +31,7 @@ const createUser = (userData) => __awaiter(void 0, void 0, void 0, function* () 
             role: userData.role || 'USER'
         }
     });
+    return Object.assign(Object.assign({}, createdUser), { role: createdUser.role.toLowerCase() === 'admin' ? 'admin' : 'user' });
 });
 exports.createUser = createUser;
 const validateUser = (email, password) => __awaiter(void 0, void 0, void 0, function* () {

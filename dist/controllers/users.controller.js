@@ -8,15 +8,13 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.deleteUser = exports.updateUser = exports.getUserDetails = exports.getUsersList = void 0;
-const prisma_1 = __importDefault(require("../lib/prisma"));
+exports.checkGamePurchase = exports.deleteUser = exports.updateUser = exports.getUserDetails = exports.getUsersList = void 0;
+const prisma_1 = require("../generated/prisma");
 const getUsersList = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const prisma = new prisma_1.PrismaClient();
     try {
-        const users = yield prisma_1.default.user.findMany({
+        const users = yield prisma.user.findMany({
             select: {
                 id: true,
                 email: true,
@@ -33,8 +31,9 @@ const getUsersList = (req, res) => __awaiter(void 0, void 0, void 0, function* (
 });
 exports.getUsersList = getUsersList;
 const getUserDetails = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    const prisma = new prisma_1.PrismaClient();
     try {
-        const user = yield prisma_1.default.user.findUnique({
+        const user = yield prisma.user.findUnique({
             where: { id: parseInt(req.params.id) },
             select: {
                 id: true,
@@ -64,9 +63,10 @@ const getUserDetails = (req, res, next) => __awaiter(void 0, void 0, void 0, fun
 });
 exports.getUserDetails = getUserDetails;
 const updateUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const prisma = new prisma_1.PrismaClient();
     try {
         const { name, email, role } = req.body;
-        const user = yield prisma_1.default.user.update({
+        const user = yield prisma.user.update({
             where: { id: parseInt(req.params.id) },
             data: { name, email, role },
             select: {
@@ -85,8 +85,9 @@ const updateUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
 });
 exports.updateUser = updateUser;
 const deleteUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const prisma = new prisma_1.PrismaClient();
     try {
-        yield prisma_1.default.user.delete({ where: { id: parseInt(req.params.id) } });
+        yield prisma.user.delete({ where: { id: parseInt(req.params.id) } });
         res.status(204).end();
     }
     catch (error) {
@@ -94,3 +95,25 @@ const deleteUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
     }
 });
 exports.deleteUser = deleteUser;
+const checkGamePurchase = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const prisma = new prisma_1.PrismaClient();
+    try {
+        const { userId, gameId } = req.params;
+        const purchase = yield prisma.purchase.findFirst({
+            where: {
+                userId: parseInt(userId),
+                items: {
+                    some: {
+                        gameId: parseInt(gameId)
+                    }
+                }
+            }
+        });
+        res.json({ success: !!purchase });
+    }
+    catch (error) {
+        console.error('Error checking game purchase:', error);
+        res.status(500).json({ success: false, message: 'Error al verificar la compra' });
+    }
+});
+exports.checkGamePurchase = checkGamePurchase;

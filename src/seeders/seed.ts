@@ -10,13 +10,15 @@ const main = async () => {
         email: "admin@admin.com",
         name: "admin",
         password: await bcrypt.hash("admin", 10),
-        role: "ADMIN"
+        role: "ADMIN",
+        verified: true
       },
       {
         email: "user@user.com",
         name: "user",
         password: await bcrypt.hash("user", 10),
-        role: "USER"
+        role: "USER",
+        verified: true
       }
     ]
   });

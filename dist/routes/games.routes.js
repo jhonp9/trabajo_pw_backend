@@ -12,4 +12,5 @@ router.put('/:id', auth_middleware_1.authenticate, admin_middleware_1.authorizeA
 router.delete('/:id', auth_middleware_1.authenticate, admin_middleware_1.authorizeAdmin, games_controller_1.deleteGame);
 router.post('/:gameId/reviews', auth_middleware_1.authenticate, games_controller_1.addGameReview);
 router.post('/:gameId/purchase', auth_middleware_1.authenticate, games_controller_1.purchaseGame);
+router.post('/process-purchase', auth_middleware_1.authenticate, games_controller_1.processPurchase);
 exports.default = router;

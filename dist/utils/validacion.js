@@ -23,7 +23,7 @@ exports.gameSchema = zod_1.z.object({
         minimum: zod_1.z.array(zod_1.z.string()).min(1, 'Requisitos mínimos son requeridos'),
         recommended: zod_1.z.array(zod_1.z.string()).min(1, 'Requisitos recomendados son requeridos')
     }),
-    trailerUrl: zod_1.z.string().url('URL de tráiler inválida'),
+    trailerUrl: zod_1.z.string().length(11, 'El código del trailer debe tener exactamente 11 caracteres'),
     oferta: zod_1.z.string().optional()
 });
 exports.reviewSchema = zod_1.z.object({

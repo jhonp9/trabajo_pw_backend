@@ -8,15 +8,13 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.deleteNews = exports.updateNews = exports.createNews = exports.getNewsItem = exports.getNewsList = void 0;
-const prisma_1 = __importDefault(require("../lib/prisma"));
+const prisma_1 = require("../generated/prisma");
 const getNewsList = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const prisma = new prisma_1.PrismaClient();
     try {
-        const news = yield prisma_1.default.news.findMany({
+        const news = yield prisma.news.findMany({
             orderBy: { createdAt: 'desc' }
         });
         res.json(news);
@@ -27,8 +25,9 @@ const getNewsList = (req, res) => __awaiter(void 0, void 0, void 0, function* ()
 });
 exports.getNewsList = getNewsList;
 const getNewsItem = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    const prisma = new prisma_1.PrismaClient();
     try {
-        const newsItem = yield prisma_1.default.news.findUnique({
+        const newsItem = yield prisma.news.findUnique({
             where: { id: req.params.id }
         });
         if (!newsItem) {
@@ -44,10 +43,11 @@ const getNewsItem = (req, res, next) => __awaiter(void 0, void 0, void 0, functi
 exports.getNewsItem = getNewsItem;
 const createNews = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     var _a;
+    const prisma = new prisma_1.PrismaClient();
     try {
         const { title, content, image } = req.body;
         const author = ((_a = req.user) === null || _a === void 0 ? void 0 : _a.name) || 'Anónimo';
-        const newsItem = yield prisma_1.default.news.create({
+        const newsItem = yield prisma.news.create({
             data: {
                 title,
                 content,
@@ -64,9 +64,10 @@ const createNews = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
 });
 exports.createNews = createNews;
 const updateNews = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const prisma = new prisma_1.PrismaClient();
     try {
         const { title, content, image } = req.body;
-        const newsItem = yield prisma_1.default.news.update({
+        const newsItem = yield prisma.news.update({
             where: { id: req.params.id },
             data: { title, content, image }
         });
@@ -78,8 +79,9 @@ const updateNews = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
 });
 exports.updateNews = updateNews;
 const deleteNews = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const prisma = new prisma_1.PrismaClient();
     try {
-        yield prisma_1.default.news.delete({ where: { id: req.params.id } });
+        yield prisma.news.delete({ where: { id: req.params.id } });
         res.status(204).end();
     }
     catch (error) {
