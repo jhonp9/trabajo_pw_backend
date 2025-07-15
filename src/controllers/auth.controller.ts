@@ -223,8 +223,10 @@ export const login: RequestHandler = async (req, res) => {
         email: user.email,
         name: user.name,
         role: user.role
-      }
-    });return 
+      },
+      token: token
+    });
+    return;
 
   } catch (error) {
     console.error('Login error:', error);
@@ -341,6 +343,6 @@ export const verifyEmail: RequestHandler = async (req, res) => {
     res.status(500).json({
       verified: false,
       message: 'Error al verificar el email'
-    });return 
-  }
+    });return 
+  }
 };
